@@ -1,0 +1,88 @@
+<div class="post-creation-wrapper">
+  <section class="post-header-section">
+    <h1 class="page-title">Add New Blog Entry</h1>
+  </section>
+
+  <article class="post-form-container">
+    <form [formGroup]="postForm" (ngSubmit)="handleFormSubmission()" class="needs-validation" novalidate>
+
+      <!-- Post Title Section -->
+      <fieldset class="form-field-group">
+        <legend class="form-label">Post Title</legend>
+        <input type="text" id="postTitle" class="form-input"
+               formControlName="title"
+               placeholder="Enter your post title here"
+               [class.input-error]="showError('title')"
+               [class.input-valid]="showSuccess('title')">
+
+        <div class="validation-messages" *ngIf="shouldDisplayErrors('title')">
+          <span class="error-message" *ngIf="hasRequiredError('title')">
+            Please provide a title for your post
+          </span>
+          <span class="error-message" *ngIf="hasMinLengthError('title')">
+            Title must be at least 5 characters
+          </span>
+          <span class="error-message" *ngIf="hasMaxLengthError('title')">
+            Title cannot exceed 150 characters
+          </span>
+        </div>
+      </fieldset>
+
+      <!-- Category Selection -->
+      <fieldset class="form-field-group">
+        <legend class="form-label">Post Category</legend>
+        <select id="postCategory" class="form-select"
+                formControlName="categoryId"
+                [class.select-error]="showError('categoryId')"
+                [class.select-valid]="showSuccess('categoryId')">
+          <option value="" selected disabled>Choose a category...</option>
+          <option *ngFor="let cat of categories"
+                  [value]="cat.id"
+                  [attr.data-category]="cat.slug">
+            {{ cat.name | titlecase }}
+          </option>
+        </select>
+
+        <div class="validation-messages" *ngIf="shouldDisplayErrors('categoryId')">
+          <span class="error-message">
+            You must select a category
+          </span>
+        </div>
+      </fieldset>
+
+      <!-- Post Content -->
+      <fieldset class="form-field-group">
+        <legend class="form-label">Post Content</legend>
+        <textarea id="postContent" class="form-textarea"
+                  formControlName="content"
+                  rows="8"
+                  placeholder="Write your post content here..."
+                  [class.textarea-error]="showError('content')"
+                  [class.textarea-valid]="showSuccess('content')"></textarea>
+
+        <div class="validation-messages" *ngIf="shouldDisplayErrors('content')">
+          <span class="error-message" *ngIf="hasRequiredError('content')">
+            Post content cannot be empty
+          </span>
+          <span class="error-message" *ngIf="hasMaxLengthError('content')">
+            Content exceeds maximum length of 2500 characters
+          </span>
+        </div>
+
+        <div class="character-counter" *ngIf="f['content'].value">
+          {{ f['content'].value.length }}/2500 characters
+        </div>
+      </fieldset>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="cancel-button" routerLink="/">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button type="submit" class="submit-button" [disabled]="!postForm.valid">
+          <i class="fas fa-check"></i> Publish Post
+        </button>
+      </div>
+    </form>
+  </article>
+</div>
